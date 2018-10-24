@@ -40,6 +40,7 @@ void printDetail(uint8_t type, int value);
 
 int Switch,Switch_prev;
 int Wait, Vol;
+
 void setup()
 {
   pinMode(SW1, INPUT_PULLUP);
@@ -53,8 +54,8 @@ void setup()
   pinMode(LED4, OUTPUT);
   pinMode(LED5, OUTPUT);
   digitalWrite(LED3,1);  
-  Switch = 0;Switch_prev=0;
-  Wait = 0;Vol = 20;
+  Switch = 0; Switch_prev=0;
+  Wait = 0; Vol = 20;
   mySoftwareSerial.begin(9600);
   Serial.begin(250000);
   
@@ -70,78 +71,14 @@ void setup()
   Serial.println(F("DFPlayer Mini online."));
   
   //----Set volume----
-  myDFPlayer.volume(10);  //Set volume value (0~30).
+  myDFPlayer.volume(20);  //Set volume value (0~30).
   //----Set different EQ----
   myDFPlayer.EQ(DFPLAYER_EQ_NORMAL);
-//  myDFPlayer.EQ(DFPLAYER_EQ_POP);
-//  myDFPlayer.EQ(DFPLAYER_EQ_ROCK);
-//  myDFPlayer.EQ(DFPLAYER_EQ_JAZZ);
-//  myDFPlayer.EQ(DFPLAYER_EQ_CLASSIC);
-//  myDFPlayer.EQ(DFPLAYER_EQ_BASS);
-  
-  //----Set device we use SD as default----
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_U_DISK);
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_SD);
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_AUX);
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_SLEEP);
-//  myDFPlayer.outputDevice(DFPLAYER_DEVICE_FLASH);
-  
-  //----Mp3 control----
-//  myDFPlayer.sleep();     //sleep
-//  myDFPlayer.reset();     //Reset the module
-//  myDFPlayer.enableDAC();  //Enable On-chip DAC
-//  myDFPlayer.disableDAC();  //Disable On-chip DAC
-//  myDFPlayer.outputSetting(true, 15); //output setting, enable the output and set the gain to 15
+
   myDFPlayer.setTimeOut(500); //Set serial communictaion time out 500ms
   Serial.println(F("OK"));
 
 }
-void test(){
-  //----Mp3 play----
-  myDFPlayer.next();  //Play next mp3
-  delay(1000);
-  myDFPlayer.previous();  //Play previous mp3
-  delay(1000);
-  myDFPlayer.play(1);  //Play the first mp3
-  delay(1000);
-  myDFPlayer.loop(1);  //Loop the first mp3
-  delay(1000);
-  myDFPlayer.pause();  //pause the mp3
-  delay(1000);
-  myDFPlayer.start();  //start the mp3 from the pause
-  delay(1000);
-  myDFPlayer.playFolder(15, 4);  //play specific mp3 in SD:/15/004.mp3; Folder Name(1~99); File Name(1~255)
-  delay(1000);
-  myDFPlayer.enableLoopAll(); //loop all mp3 files.
-  delay(1000);
-  myDFPlayer.disableLoopAll(); //stop loop all mp3 files.
-  delay(1000);
-  myDFPlayer.playMp3Folder(4); //play specific mp3 in SD:/MP3/0004.mp3; File Name(0~65535)
-  delay(1000);
-  myDFPlayer.advertise(3); //advertise specific mp3 in SD:/ADVERT/0003.mp3; File Name(0~65535)
-  delay(1000);
-  myDFPlayer.stopAdvertise(); //stop advertise
-  delay(1000);
-  myDFPlayer.playLargeFolder(2, 999); //play specific mp3 in SD:/02/004.mp3; Folder Name(1~10); File Name(1~1000)
-  delay(1000);
-  myDFPlayer.loopFolder(5); //loop all mp3 files in folder SD:/05.
-  delay(1000);
-  myDFPlayer.randomAll(); //Random play all the mp3.
-  delay(1000);
-  myDFPlayer.enableLoop(); //enable loop.
-  delay(1000);
-  myDFPlayer.disableLoop(); //disable loop.
-  delay(1000);
-
-  //----Read imformation----
-  Serial.println(myDFPlayer.readState()); //read mp3 state
-  Serial.println(myDFPlayer.readVolume()); //read current volume
-  Serial.println(myDFPlayer.readEQ()); //read EQ setting
-  Serial.println(myDFPlayer.readFileCounts()); //read all file counts in SD card
-  Serial.println(myDFPlayer.readCurrentFileNumber()); //read current play file number
-  Serial.println(myDFPlayer.readFileCountsInFolder(3)); //read fill counts in folder SD:/03
-}
-
 void loop()
 {
   int i;
@@ -149,7 +86,6 @@ void loop()
   if (myDFPlayer.available()) {
     printDetail(myDFPlayer.readType(), myDFPlayer.read()); //Print the detail message from DFPlayer to handle different errors and states.
   }
-  //Serial.println(myDFPlayer.readState()); //read mp3 state
   Serial.print(".");
   i = checkSW();
   if(((Wait%20)==0)&&(i==0)) ShowLED(Switch_prev);
